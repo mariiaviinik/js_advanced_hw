@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Form work1</title>
+  <script>
+    /*
+      Задание:
+
+      1. Сгенерировать список стран в Select countries
+      2. При выборе страны генерировать еще один Select со списком
+        городов этой страны и вывести этот селект в блок result
+      3. При выборе города нужно случайно рандомить температуру от
+      -10 градусов до +40. Если температура
+
+        -10 до 0 то 'Солнечно' 'Легкий снегопад' 'Сильный снегопад'
+        0 до 30 то  'Солнечно' 'Дождь' 'Ветер' 'Сильный дождь'
+        30 до 40 то 'Солнечно' 'Засуха' 'Ветер'
+
+      4. Вывести сообщение на страничку
+        {Country}. В {City} {Weather} {Temperature} градусов.
+        Ukraine. В Kyiv Солнечно -10 градусов
+
+        + бонус добавить красивые картинки с погодой
+    */
+    function addToSelect (arr, select) {
+      let option = new Option("Choose", "choice", 1, 1);
+      option.disabled = "true";
+          select.appendChild(option);
+      for (let item of arr){
+          let option = new Option(item, item);
+          select.appendChild(option);
+        } 
+    }
+
+    function selected(select){
+      for(let item of select){
+        if(item.selected) return item.value;
+      }
+    }
+
+    function random (min,max){
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    window.addEventListener("load", function () {
+      var countries = ['Ukraine', 'Poland', 'USA'];
+      let cities = {
+        ukraineCity: ['Kyiv', 'Lviv', 'Odesa', 'Charkiv'],
+        polandCity: ['Warszawa', 'Poznan', 'Krakow', 'Katowice'],
+        usaCity: ['New York', 'Los Angeles', 'Las Vegas', 'Chicago']
+      }
+      let weaterImages = ["../weatherImages/sun.jpg"];
+
+      let weather = [
+        ['Солнечно', 'Легкий снегопад', 'Сильный снегопад'],
+        ['Солнечно', 'Дождь', 'Ветер', 'Сильный дождь'],
+        ['Солнечно', 'Засуха', 'Ветер']
+      ]
+
+      let select = document.querySelector("#countries");
+      addToSelect(countries, select);
+
+      var newSelect = document.createElement("select");
+
+      select.addEventListener("change", () => {
+        picture.style.display = "none";
+        select.after(newSelect);
+        newSelect.innerHTML = "";
+        result.innerText = "";
+        addToSelect(cities[selected(select).toLowerCase() + "City"], newSelect);
+
+        var t, W;
+        newSelect.addEventListener("change", () => {
+          t = random(-10, 40);
+
+          if(t<0){
+            W = weather[0][random(0, weather[0].length-1)];
+          } else if(t>0 && t<30) {
+            W = weather[1][random(0, weather[1].length-1)];
+          } else {W = weather[2][random(0, weather[2].length-1)];}
+          result.innerText = `${selected(select)}. В ${selected(newSelect)} ${W} ${t} градусов.`
+
+          let src;
+          switch(W){
+            case 'Солнечно': src = "weatherImages/sun.jpg"; break;
+            case 'Легкий снегопад': src = "weatherImages/easySnowfall.jpg"; break;
+            case 'Сильный снегопад': src = "weatherImages/hardSnowFall.jpg"; break;
+            case 'Дождь': src = "weatherImages/easyRain.jpg"; break;
+            case 'Ветер': src = "weatherImages/windy.jpg"; break;
+            case 'Сильный дождь': src = "weatherImages/heavyRain.jpg"; break;
+            case 'Засуха': src = "weatherImages/drought.jpg"; break;
+          }
+          console.log(src);
+          (document.querySelector("#picture")).src = src;
+          picture.style.display = "block";
+        })
+      });
+    });
+  </script>
+</head>
+<body>
+  <select id="countries" margin-left = "5px"></select>
+  <div id="result" ></div>
+  <div> <img id="picture"> </div>
+</body>
+<style>
+  select, div{
+    margin: 0 5px 5px;
+    }
+  #picture{
+    max-width: 250px;
+    max-height: 150;
+    display: none;
+  }
+</style>
+</html>

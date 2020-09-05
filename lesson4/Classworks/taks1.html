@@ -14,8 +14,35 @@
         + бонус - то поле, которое не прошло валидацию подсвечивать красным.
                 - которое прошло - подсвечивать зеленым.
     */
-    var form = document.forms[0];
-    console.log(form);
+
+   window.addEventListener("load", () => {
+    var formElements = document.myForm.elements;
+
+    document.myForm.addEventListener("change", () => {
+      let access = 0;
+
+      if(formElements.login.value != ""){
+        formElements.login.classList.add("OK");
+        access++;
+      } else{
+        formElements.login.classList.add("error");
+      }
+
+      if(formElements.pas1.value == formElements.pas2.value && formElements.pas1.value != "" && formElements.pas2.value != ""){
+          formElements.pas1.classList.add("OK");
+          formElements.pas2.classList.add("OK");
+          access++;
+        } else{
+          formElements.pas2.classList.add("error");
+        }
+
+      if(formElements.check.checked && access==2){
+       formElements.submit.disabled=false;
+      } else{
+        formElements.submit.disabled=true;
+      }
+    });
+   });
   </script>
 </head>
 <body>
@@ -25,9 +52,9 @@
     <input type="password" name='pas2' placeholder="Повторите пароль" />
     <label for="agree">
       <span>Вы согласны с лицензионым соглашением.</span>
-      <input type="checkbox" id="agree" />
+      <input type="checkbox" name = "check" id="agree" />
     </label>
-    <input type="submit" id="submit" value="Отправить" disabled/>
+    <input type="submit" name = "submit" id="submit" value="Отправить" disabled/>
   </form>
 
   <style>

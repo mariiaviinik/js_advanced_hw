@@ -8,9 +8,9 @@ function changeColor()
     for(var i=0;i<3;i++)
     {
         var colors = [];
-        color[i]=getRandomIntInclusive(256).toString(16);
+        colors[i]=getRandomIntInclusive(256).toString(16);
     }
-    console.log(div.style.background = "#" + color[0] + color[1] + color[2]);
+    div.style.background = "#" + colors[0] + colors[1] + colors[2];
     // for(var i=0;i<3;i++)
     // {
     //     color[i]=getRandomIntInclusive(256);

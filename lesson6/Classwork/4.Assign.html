@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Classwork</title>
+</head>
+<body>
+  <div class="wrap">
+      <div class="assigned">
+        <form class="ObjForm" name="first" id="firstF">
+            <input name="key" placeholder="Enter your key"/>
+            <input name="value" placeholder="Enter your value"/>
+            <button type="submit" id="btn1">Send</button>
+        </form>
+        <div class="createResult">
+          <header>
+            Created Object
+          </header>
+          <div class="createdObj">
+            <code class="objCode">
+              {
+                id:123,
+                b:'test',
+                demo:'test2'
+              }
+            </code>
+          </div>
+        </div>
+      </div>
+
+      <div class="assigned">
+        <form class="ObjForm" name="second" id="secondF">
+            <input name="key" placeholder="Enter your key"/>
+            <input name="value" placeholder="Enter your value"/>
+            <button type="submit" id="btn2">Send</button>
+        </form>
+          <div class="createResult">
+            <header>
+              Created Object
+            </header>
+            <div class="createdObj">
+              <code class="objCode">
+                {
+                  id:123,
+                  b:'test',
+                  demo:'test2'                                                  
+                }
+              </code>
+            </div>
+          </div>
+      </div>
+    </div>
+    <div class="resultBlock">
+       <button id="combineBtn">Combine Objects!</button>
+      <h3> Result: </h3>
+      <div id="result">
+        <code class="objCode"></code>
+      </div>
+    </div>
+
+      <script>
+
+      </script>
+      <style>
+        .wrap{
+          width: 800px;
+          display: flex;
+        }
+        .ObjForm,
+        .resultBlock{
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          box-sizing: border-box;
+          padding: 10px 20px;
+        }
+
+        .createResult{
+          width:200px;
+        }
+
+        .assigned{
+          width: 600px;
+          display: flex;
+        }
+        .createResult header{
+          font-weight: 700;
+        }
+      </style>
+      <script>
+        /*
+        Задание:
+          1. Используя интерфейс который есть на страничке, написать визуальный
+          конструктор обектов используя значение key-value, которые вводятся в
+          соответствующие поля в форме.
+
+          2. Каждый созданый обьект выводить в тег code после добавления каждого
+          нового поля. Т.е мы должны визуально видить в каком состоянии наши обьекты
+          сейчас
+
+          3. По нажатию кнопки Combine Objects! два обьекта должны обьедениться
+          используя метод Object.assing или spread operator и вывестись на стринчку.
+
+          * Изменять HTML можно.
+
+        */
+        function obj(){
+          this.id = 123,
+          this.b = 'test',
+          this.demo = 'test2',
+          this.createProp = function(key, value){
+            if( value=='true' ){
+              this[key] = true;
+            } else if( value=='false' ){
+              this[key] = false;
+            } else if( value.replace(/\d/g, '').length==0 ){
+              this[key] = +value;
+            } else{
+              this[key] = value;
+            }
+          }
+        }
+
+        function showProp (obj, i) {
+          createdObjs[i].innerHTML = '{ ';
+          for(var key in obj){
+            createdObjs[i].innerHTML += `${key}:${obj[key]},<br>`;
+          }
+          createdObjs[i].innerHTML += `}`;
+        }
+
+        let firstObj = new obj(),
+        secondObj = new obj(),
+        assignObj,
+        firstFEls = document.forms.first.elements,
+        secondFEls = document.forms.second.elements,
+        createdObjs = document.querySelectorAll('.objCode');
+        
+        btn1.addEventListener('click', () => {
+          event.preventDefault();
+          firstObj.createProp(firstFEls.key.value, firstFEls.value.value);
+          firstFEls.value.value = firstFEls.key.value = '';
+          showProp(firstObj, 0);
+        });
+
+        btn2.addEventListener('click', () => {
+          event.preventDefault();
+          secondObj.createProp(secondFEls.key.value, secondFEls.value.value);
+          secondFEls.value.value = secondFEls.key.value = '';
+          showProp(secondObj,1);
+        });
+
+        combineBtn.addEventListener('click', () => {
+          assignObj = Object.assign(firstObj, secondObj);
+          showProp(assignObj,2);
+        });
+      </script>
+</body>
+</html>

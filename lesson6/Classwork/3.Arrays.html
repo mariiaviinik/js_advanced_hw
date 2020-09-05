@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Classwork</title>
+    <h1 style="margin:20px">Make a choice!</h1>
+</head>
+<body>
+  <div style="display: flex">
+    <div style="margin:20px">
+      <select id="coursesSelect"></select>
+      <input type="text" value="Your result" id="result" style="width:200px;">
+      <div id="listOfCourses" style="margin-top:20px"></div>
+    </div>
+    <div style="margin:20px">
+      <select id="actorsSelect"></select>
+      <select id="durationSelect"></select>
+      <div>
+        <h2>By actor:</h2>
+        <ul id="resByActor"></ul>
+        <h2>By duration:</h2>
+        <ul id="resByDur"></ul>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <script>
+
+    /*
+      Задание:
+      1. При помощи методов изложеных ниже, переформатировать ITEA_COURSES в массив который содержит длину строк каждого из элементов.
+      2. Отфильтровать массив ITEA_COURSES по алфавиту.
+          + Бонусный бал. Вывести на страничку списком
+      3. Реализация функции поиска по массиву ITEA_COURSES.
+          + Бонусный бал. Вывести на страничку инпут и кнопку по которой будет срабатывать поиск.
+    */
+
+    const ITEA_COURSES = ["Курс HTML & CSS", "JavaScript базовый курс", "JavaScript продвинутый курс", "JavaScript Professional", "Angular 2.4 (базовый)", "Angular 2.4 (продвинутый)", "React.js", "React Native", "Node.js", "Vue.js"];
+    ITEA_COURSES.sort();
+    ITEA_COURSES.forEach(el => {
+      listOfCourses.innerHTML+=`<div>${el}</div>`;
+    });
+    console.log(ITEA_COURSES);
+
+    let newITEA_COURSES = ITEA_COURSES.map(x => {
+      coursesSelect.innerHTML+=`<option>${x.length}</option>`;
+      return x.length;
+    }).sort(function (a, b) {
+      if (a < b) {
+        return -1;
+      }
+    });
+    console.log(newITEA_COURSES);
+
+    coursesSelect.addEventListener("change", () => {
+      ITEA_COURSES.forEach(x => {
+        if(x.length==coursesSelect.value){
+          result.value=x;
+        }
+      })
+    });
+
+    /*
+      Задание 2:
+      Написать фильтр массива по:
+      Актеру, продолжительности
+
+      Бонус:
+        Сделать графическую оболочку для программы:
+        - Селект со списком актеров
+        - Селект или инпут с продолжительностью
+        - Результат в виде списка фильмов
+    */
+
+      var actors = ['Elijah Wood', 'Ian McKellen', 'Orlando Bloom','Ewan McGregor',' Liam Neeson', 'Natalie Portman', 'Ewan McGregor', 'Billy Bob Thornton', 'Martin Freeman']
+      var movies = [
+            {
+              name: "Lord of the Rigs",
+              duration: 240,
+              starring: [ 'Elijah Wood', 'Ian McKellen', 'Orlando Bloom']
+            },
+            {
+              name: "Star Wars: Episode I - The Phantom Menace",
+              duration: 136,
+              starring: [ 'Ewan McGregor',' Liam Neeson', 'Natalie Portman']
+            },
+            {
+              name: "Fargo",
+              duration: 100,
+              starring: [ 'Ewan McGregor', 'Billy Bob Thornton', 'Martin Freeman']
+            },
+            {
+            name: "V for Vendetta",
+            duration: 150,
+            starring: [ 'Hugo Weaving', 'Natalie Portman', 'Rupert Graves']
+          }
+        ];
+
+        actors.forEach(x => {
+          actorsSelect.innerHTML+=`<option>${x}</option>`;
+        });
+
+        movies.forEach(x => {
+          durationSelect.innerHTML+=`<option>${x.duration}</option>`;
+        });
+
+        function find(){
+          resByActor.innerHTML = resByDur.innerHTML = "";
+          movies.forEach(movie => {
+            if(movie.duration == durationSelect.value){
+              resByDur.innerHTML+=`<li>${movie.name}</li>`;
+            }     
+            movie.starring.forEach(actor => {
+              if(actor == actorsSelect.value){
+                resByActor.innerHTML+=`<li>${movie.name}</li>`;
+              }              
+            });
+          })
+        }
+
+        actorsSelect.addEventListener("change", () => {
+          find();
+        });
+
+        durationSelect.addEventListener("change", () => {
+          find();
+        });
+    </script>
+</body>
+</html>

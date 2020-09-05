@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form id="MyValidateForm" name = "myForm">
+        <input type="text" name='login' placeholder="Ваш имя" minlength="2" required/>
+        <input type="email" name='email' placeholder="Ваш email" minlength="3" required validEmail/>
+        <input type="password" name='pas' placeholder="Ваш пароль" minlength="8" maxlength="16" required/>
+        <input type="number" name='num' placeholder="Количество сьеденых яблок" min="1" minlength="1" required/>
+        <input type="text" name='thanks' placeholder="Напиши 'спасибо' за яблоки" pattern="спасибо" required/>
+        <label for="agree">
+          <span>Согласен на обучение</span>
+          <input type="checkbox" name = "agree" id="agree" required/>
+        </label>
+        <input type="submit" name = "button" id="check" value="Проверить"/>
+        <input type="submit" name = "submit" id="submit" value="Отправить" disabled/>
+      </form>
+    
+      <style>
+        #MyValidateForm{
+          width: 350px;
+          display: flex;
+          flex-direction: column;
+        }
+    
+        #MyValidateForm input{
+          margin-bottom: 10px;
+          box-sizing: border-box;
+          padding: 10px 20px;
+        }
+        .invalid{
+            border: 1px solid red;
+        }
+        .valid{
+            border: 1px solid green;
+        }
+    </style>
+</body>
+<script src="Task1.js"></script>
+</html>

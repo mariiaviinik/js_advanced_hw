@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Homework</title>
+</head>
+<body>
+  <div>
+    <button id="start">Start</button>
+    <button id="stoper">Stop</button>
+    <button id="restart">Restart</button>
+    <button id="changeSide">Change side</button>
+  </div>
+  <div id="myDIV">
+    <div id="container">
+      <div id="arrow"></div>
+    </div>
+    <div id="time"></div>
+  </div>
+  <style>
+    #arrow{
+      height: 70px ;
+      border-bottom: 70px solid white;
+      width: 2px;
+      background: linear-gradient(to top, black 0%, white 100%);;
+    }
+    #container{
+      box-sizing: border-box;
+      height: 155px ;
+      width: 155px;
+      margin: 5px;
+      border: 2px solid black;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+    }
+    #myDIV{
+      display: flex;
+      align-items: center;
+    }
+  </style>
+      <!--
+        Создайте счетчик секунд, который начинает отчет с 1 и заканчивается на 30,
+        также добавьте кнопки который останавливают отчет, и запускают его заново и добавьте кнопку обнуляющую отчет.
+        Также попробуйте изменить код так чтобы отчет начиналься с 30 и заканчивалься на 1.
+
+       + бонус: Сделать так что бы на каждый тик (1с/2c) менялся цвет фона. Можно на основе генератора случайного цвета с предудущих уроков.
+       + бонус: Сделать визуализацию стрелки которая идет по кругу
+            document.getElementById("myDIV").style.transform = "rotate(7deg)";
+
+       + бонус: Сделать кнопки которые выбирают режим в котором идет отсчет - обычный от 0 до 30 или реверсивный от 30 до 0
+      -->
+      <script> 
+        let counter = 0,
+        side = true,
+        deg = 0;
+
+        function stopFunc(e) {
+          clearInterval( timer );
+        }
+
+        function startFunc(){
+          timer = setInterval( () => {
+            if(side){
+              counter++;
+              deg+=12;
+              arrow.style.transform = "rotate("+deg+"deg)";
+            } else {
+              counter--;
+              deg-=12;
+              arrow.style.transform = "rotate("+deg+"deg)";
+            }
+            time.innerText = Math.abs(counter);
+            if(Math.abs(counter) == 30){
+              counter = 0;
+              stopFunc();
+            }
+          }, 1000 );
+        }
+
+        function restartFunc() {
+          time.innerText = counter = deg = 0;
+          arrow.style.transform = "rotate("+0+"deg)";
+        }
+
+        function sideChange(){
+          if(side){
+            side = false;
+          } else{
+            side = true;
+          }
+        }
+
+        start.addEventListener('click', startFunc);
+        stoper.addEventListener('click', stopFunc);
+        restart.addEventListener('click', restartFunc);
+        changeSide.addEventListener('click', sideChange);
+      </script>
+</body>
+</html>
