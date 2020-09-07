@@ -15,13 +15,13 @@ let Train = {
     name: "Train",
     speed: 160,
     numOfPassengers: 10,
-    go: () => {
-        console.log(`Поезд ${name} везет ${numOfPassengers} со скоростью ${speed}`);
+    go() {
+        console.log(`Поезд ${this.name} везет ${this.numOfPassengers} со скоростью ${this.speed}`);
     },
-    stay: () => {
-        console.log(`Поезд ${name} остановился. Скорость ${speed}`);
+    stay() {
+        console.log(`Поезд ${this.name} остановился. Скорость ${this.speed}`);
     },
-    pickUp: () =>{
+    pickUp() {
         numOfPassengers+=4;
     }
 }
