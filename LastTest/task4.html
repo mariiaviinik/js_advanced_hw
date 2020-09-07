@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <table id='table'>
+        <tr>
+            <td>|index </td>
+            <td>|company </td>
+            <td>|email </td>
+            <td>|phone </td>
+            <td>|address</td>
+        </tr>        
+    </table>
+    <button id='button'>Show/Hide address</button>
+    <!-- 
+    1. При помощи fetch получить данные:
+     http://www.json-generator.com/api/json/get/cgwbLkTxnS?indent=2
+    2. Полученый ответ преобразовать в json вызвав метод .json с объекта ответа
+    3. На основе данных посторить табличку
+
+    | index | company | email | phone | address |
+
+    4. создать кнопу которая скрывает показывает address
+     -->
+</body>
+<script>
+    let counter = 0,
+    rows;
+
+    function newRow(){
+        counter++;
+        table.innerHTML+=`<tr id='${counter}'></tr>`;
+    }
+
+    function newCell(value){
+        return `<td>|${value}</td>`;
+    }
+
+    fetch('http://www.json-generator.com/api/json/get/cgwbLkTxnS?indent=2')
+    .then(
+        (res) => {
+            return res.json();
+        }
+    )
+    .then(
+        (res) => {
+            res.forEach(item => {
+                newRow();
+                rows = table.querySelectorAll('tr');
+                for (let key in item) {
+                    switch(key){
+                        case 'index': rows[counter].innerHTML+=newCell(item[key]); break;
+                        case 'company': rows[counter].innerHTML+=newCell(item[key]); break;
+                        case 'email': rows[counter].innerHTML+=newCell(item[key]); break;
+                        case 'phone': rows[counter].innerHTML+=newCell(item[key]); break;
+                        case 'address': rows[counter].innerHTML+=newCell(item[key]); break;
+                        default: console.log('dont need it');
+                    }                    
+                }  
+            });
+        }
+    )
+
+    let show = false, arrOfDelRows;    
+    button.addEventListener('click', () => {
+        let index = 0;
+        lastCells = table.querySelectorAll('tr>td:last-child');
+        if(show){
+            rows.forEach(row => {
+                    row.innerHTML+=arrOfDelRows[index].outerHTML;
+                    index++;
+                }
+            );
+            show = false;
+        } else {
+            arrOfDelRows = [];
+            rows.forEach(row => {
+                    arrOfDelRows[index] = row.removeChild(lastCells[index]);                
+                    index++;
+                }
+            );
+            show = true;
+        }
+    });
+</script>
+</html>
