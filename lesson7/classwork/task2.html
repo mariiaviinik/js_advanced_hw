@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Constructors</title>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <form id="initialMessageForm">
+        <label for="author">
+          <span>Author</span>
+          <select id="author" name="author">
+            <option value="Taras Shevchenko">Taras Shevchenko</option>
+            <option value="Ivan Franko">Ivan Franko</option>
+            <option value="Vasyl Stys">Vasyl Stys</option>
+            <option value="Oles Gonchar">Oles Gonchar</option>
+          </select>
+        </label>
+
+        <label for="message">
+          <span>Message</span>
+          <textarea placeholder="Your Message" id="message" name="message"></textarea>
+        </label>
+
+        <button type="submit">Send Message</button>
+      </form>
+    </header>
+
+    <section>
+      <ul id="message_list"></ul>
+    </section>
+
+  </div>
+
+
+  <script>    
+    const initialMessageForm = document.getElementById('initialMessageForm');
+    let messages = [];
+
+    initialMessageForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      let messageList = document.getElementById('message_list');
+      let message = new Message(new Date().getTime(),
+        initialMessageForm.author.value,
+        initialMessageForm.message.value,
+        new Date().toDateString(), []);
+
+      messageList.appendChild(message.Render());
+    });
+
+    class Message {
+      constructor(id, author, text, date, answers) {
+        this.id = id;
+        this.author = author;
+        this.text = text;
+        this.date = date;
+        this.answers = answers;
+      }
+
+      SkipMessage(id) {
+        let messageList = document.getElementById('message_list');
+        messageList.querySelector(`[data-id="${id}"]`).remove();
+      }
+
+      SendAnswer(obj) {
+        this.answers.push(obj);
+        return obj.Render();
+      }
+
+      AnswerMessage(e) {
+        let answerContainer = document.createElement('ul');
+        let answerTextArea = document.createElement('textarea');
+        let btnSendAnswer = document.createElement('button');
+
+        answerContainer.append(answerTextArea, btnSendAnswer)
+        e.target.closest('li').append(answerContainer);
+
+        btnSendAnswer.innerText = 'Send answer';
+        btnSendAnswer.addEventListener('click', (e) => {
+          let answer = this.SendAnswer(new Answer(new Date().getTime(),
+            initialMessageForm.author.value,
+            answerTextArea.value,
+            new Date().toDateString(), [],
+            this.id));
+
+          e.target.closest('ul').appendChild(answer);
+        })
+      }
+
+      Render() {
+        let message = document.createElement('li');
+        message.dataset.id = this.id;
+
+        let answers =`"<ul>${this.GetAnswersHTML()}</ul>"`;
+
+        message.innerHTML = `
+                              <div class="message__date">${this.date}</div>
+                              <div class="message__author"><b>${this.author}</b></div>
+                              <div class="message__text">${this.text}</div>
+                              <div class="message__controls">
+                                <button class="_skipMessage">Skip</button>
+                                <button class="_answerMessage">Answer</button>
+                              </div>
+                              ${answers}
+                            `;
+                            
+        let skipButton = message.querySelector('._skipMessage');
+        skipButton.addEventListener('click', () => {
+          this.SkipMessage(this.id);
+        });
+
+        let answerButton = message.querySelector('._answerMessage');
+        answerButton.addEventListener('click', (e) => { this.AnswerMessage(e) });
+
+        return message;
+      }
+
+      GetAnswersHTML() {
+        return this.answers.map(item => {
+          return item.Render().outerHTML;
+        }).join('');
+      }
+    }
+
+    class Answer extends Message {
+      constructor(id, author, text, date, answer, parentId) {
+        super(id, author, text, date, answer);
+        this.parentId = parentId;
+      }
+    }
+
+    /*
+    Задание на классы.
+
+    Создать класс Message конструктор котрого состоит из следующих полей:
+    id, author, text, date, answers
+
+    У этого класса будет два метода:
+    SkipMessage() -> которое должно найти сообщение и удалить его из массива.
+    AnswerMessage()-> должно отрыть поле ввода, в который вы сможете ввести ответ
+    SendAnswer() -> метод который «отравляет» ответ, при этом обновляя поле ответа(answers) в вашем объекте с сообщением.
+
+    В метод SendAnswer нужно передать обьект класса Answer который наследуется от класса Message,
+    Но еще дополнительно будет иметь поле parentId.
+
+
+    message = {
+      id: '',
+      author: '',
+      text: '',
+      date: '',
+      answers: [
+        {
+          id: '',
+          author: '',
+          text: '',
+          date: '',
+          parentId: '',
+          answers: ''
+        }
+      ]
+    }
+
+    +Bonus: После создании сообщение добавляется в массив со всеми сообщениями, которые потом будут выводится на экран.
+
+    _ _ _
+
+    Задание можно разбелить на две части:
+      1. Создание самого сообщения:
+      id->выдаётся автоматом
+      Author-> селект с выбором автора
+      Text -> текст сообщения
+      date -> автоматически в момент создания
+
+      Все данные беруться с формы. Массив с сообщениями передается в функцию рендера, которая генерирует сам список.
+
+      2. Ответ на сообщение
+
+  */
+
+  </script>
+</body>
+</html>
